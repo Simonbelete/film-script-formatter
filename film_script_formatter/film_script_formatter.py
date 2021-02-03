@@ -42,6 +42,8 @@ class FilmScriptFormatter:
                     count += 1
                     ## Check if actor name key exists append if found or create new one
                     actor_name_wo_modifier, *b = actor_name.split('(')
+                    ## Reclean the actor name
+                    actor_name_wo_modifier = actor_name_wo_modifier.strip()
                     if actor_name_wo_modifier in actors_scenes:
                         actors_scenes[actor_name_wo_modifier] = actors_scenes[actor_name_wo_modifier] + ',' + str(count)
                     else:
