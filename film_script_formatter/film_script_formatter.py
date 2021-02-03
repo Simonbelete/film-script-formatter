@@ -19,7 +19,6 @@ class FilmScriptFormatter:
         actor_regex = r'^([^\S\r\n]{%s,}|\t{3,6})([A-Z\'\.\(\)\s]{2,}\n)' % indentation
         actors_scenes = {}
         count = 0
-        print(self.filename)
         readFile = (FileReader(self.encoding)).read(self.filename)
 
        
@@ -35,7 +34,6 @@ class FilmScriptFormatter:
             actor_name = (actor_name.split('\n'))[0]
             ## Check if string is a keyword
             if not actor_name in self.ACTOR_KEY_WORDS:
-                print(actor_name)
                 ## Get the string found between parenthesis
                 actor_modifier = actor_name[actor_name.find("(")+1:actor_name.find(")")]
                 ## Append to `actors_scenes` if it is not a continued dialouge
