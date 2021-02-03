@@ -15,7 +15,7 @@ class FilmScriptFormatter:
         self.ACTOR_EMPTY_IDENTIFIERS = ['...', '---', '***']
         self.ACTOR_MODIFIERS = ['CONT\'D', 'CONT', '' 'CONTINUED']
 
-    def actors(self, indentation = 16, output = 'screenpaly_actors.json'):
+    def actors(self, indentation = 20, output = 'screenpaly_actors.json'):
         actor_regex = r'^([^\S\r\n]{%s,}|\t{3,6})([A-Z\'\.\(\)\s]{2,}\n)' % indentation
         actors_scenes = {}
         count = 0
@@ -33,7 +33,11 @@ class FilmScriptFormatter:
             ## Remove empty new lines
             actor_name = (actor_name.split('\n'))[0]
             ## Check if string is a keyword
+            ## eg. if MIGUEL (CONT'D) is found it considers it as one play from the previous actor i.e not counted
             if not actor_name in self.ACTOR_KEY_WORDS:
+                ## Check if actor name is refrence eg. (TO SOMEONE)
+                if actor_name.find("(") + actor_name.find(")") > 0:
+                    continue
                 ## Get the string found between parenthesis
                 actor_modifier = actor_name[actor_name.find("(")+1:actor_name.find(")")]
                 ## Append to `actors_scenes` if it is not a continued dialouge
@@ -44,9 +48,9 @@ class FilmScriptFormatter:
                     actor_name_wo_modifier, *b = actor_name.split('(')
                     ## Reclean the actor name
                     actor_name_wo_modifier = actor_name_wo_modifier.strip()
-                    if actor_name_wo_modifier in actors_scenes:
+                    if actor_name_wo_modifier in actors_scenes: # and not actor_name_wo_modifier:
                         actors_scenes[actor_name_wo_modifier] = actors_scenes[actor_name_wo_modifier] + ',' + str(count)
-                    else:
+                    else: #elif actor_name_wo_modifier:
                         actors_scenes[actor_name_wo_modifier] = str(count)
         
         ## Close resource
